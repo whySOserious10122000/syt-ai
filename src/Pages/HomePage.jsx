@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField, Button, IconButton, Autocomplete, Select, MenuItem, FormControl, InputLabel, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import { TextField, Button, IconButton, Autocomplete, Select, MenuItem, FormControl, InputLabel, RadioGroup, FormControlLabel, Radio, CircularProgress } from "@mui/material";
 import { LocalizationProvider, DateRangePicker } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -100,6 +100,8 @@ const Homepage = () => {
 
     const navigate = useNavigate();
 
+    const [loading, setLoading] = useState(false);
+
     const handleSubmit = async () => {
         const payload = {
             tripDetails: {
@@ -135,14 +137,19 @@ const Homepage = () => {
             },
         };
 
+        setLoading(true)
+
         try {
             const response = await axios.post("https://travelassist.onrender.com/generate-itinerary", payload);
-            console.log("Response:", response.data);
+            if (response.data) {
+                setLoading(false)
+            }
 
             // Navigate to the /packages page and pass the response data
             navigate("/packages", { state: { response: response.data } });
         } catch (error) {
             console.error("Error:", error);
+            setLoading(false)
             alert("Failed to generate itinerary. Please try again later.");
         }
     };
@@ -444,8 +451,18 @@ const Homepage = () => {
                                 padding: "8px 16px",
                             }}
                             onClick={handleSubmit}
+                            disabled={loading} // Disable the button when loading
                         >
-                            Submit
+                            {loading ? (
+                                <CircularProgress
+                                    size={20}
+                                    style={{
+                                        color: "white", // Match the button text color
+                                    }}
+                                />
+                            ) : (
+                                "Submit"
+                            )}
                         </Button>
                     </div>
                 </form>

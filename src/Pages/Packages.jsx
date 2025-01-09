@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { Card, CardContent, Typography, Box, Divider, List, ListItem, ListItemIcon } from "@mui/material";
-import CircleIcon from '@mui/icons-material/Circle'; // For the disc/bullet point
+import { Card, CardContent, Typography, Box, Divider } from "@mui/material";
 
 const Packages = () => {
     const location = useLocation();
@@ -41,29 +40,27 @@ const Packages = () => {
                                 </Typography>
                                 <Divider className="bg-gray-200" />
                             </Box>
-                            <List className="space-y-4">
+                            <ul className="space-y-4">
                                 {day?.activities?.map((activity, i) => (
-                                    <ListItem key={i} className="flex items-start gap-3">
-                                        <ListItemIcon>
-                                            <CircleIcon fontSize="small" className="text-gray-600" />
-                                        </ListItemIcon>
-                                        <div>
-                                            <Typography
-                                                variant="subtitle1"
-                                                className="text-gray-600 font-semibold text-lg"
-                                            >
-                                                {activity?.time}
-                                            </Typography>
-                                            <Typography
-                                                variant="body2"
-                                                className="text-gray-700"
-                                            >
-                                                {activity?.activity}
-                                            </Typography>
-                                        </div>
-                                    </ListItem>
+                                    <li
+                                        key={i}
+                                        className="flex items-start gap-2"
+                                    >
+                                        <Typography
+                                            variant="subtitle2"
+                                            className="text-gray-500 font-medium"
+                                        >
+                                            {activity?.time}
+                                        </Typography>
+                                        <Typography
+                                            variant="body2"
+                                            className="text-gray-700"
+                                        >
+                                            {activity?.activity}
+                                        </Typography>
+                                    </li>
                                 ))}
-                            </List>
+                            </ul>
                         </CardContent>
                     </Card>
                 ))}

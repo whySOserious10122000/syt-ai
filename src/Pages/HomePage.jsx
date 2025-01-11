@@ -140,7 +140,7 @@ const Homepage = () => {
         setLoading(true)
 
         try {
-            const response = await axios.post("https://travelassist.onrender.com/generate-itinerary", payload);
+            const response = await axios.post("https://travelassist.onrender.com/generate-travel-plan", payload);
             if (response.data) {
                 setLoading(false)
             }

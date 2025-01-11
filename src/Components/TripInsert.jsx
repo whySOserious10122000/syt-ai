@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { TextField, Checkbox, FormControlLabel, Button, Grid, Typography, Paper } from "@mui/material";
-import axios from "axios";
 
 const TripDetailsForm = () => {
   const [formData, setFormData] = useState({
@@ -82,16 +81,29 @@ const TripDetailsForm = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post("/api/trip-details", formData.tripDetails);
-      alert("Data submitted successfully!");
-      console.log(response.data);
+        const response = await fetch("/api/trip-details", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData.tripDetails),
+        });
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        alert("Data submitted successfully!");
+        console.log(data);
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("Failed to submit data.");
+        console.error("Error submitting form:", error);
+        alert("Failed to submit data.");
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
 
   return (
     <Paper

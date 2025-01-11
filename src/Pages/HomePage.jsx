@@ -4,7 +4,6 @@ import { LocalizationProvider, DateRangePicker } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { Add, Remove } from "@mui/icons-material";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {
@@ -136,23 +135,34 @@ const Homepage = () => {
                 },
             },
         };
-
-        setLoading(true)
-
+    
+        setLoading(true);
+    
         try {
-            const response = await axios.post("https://travelassist.onrender.com/generate-travel-plan", payload);
-            if (response.data) {
-                setLoading(false)
+            const response = await fetch("https://travelassist.onrender.com/generate-travel-plan", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+    
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
             }
-
+    
+            const data = await response.json();
+            setLoading(false);
+    
             // Navigate to the /packages page and pass the response data
-            navigate("/packages", { state: { response: response.data } });
+            navigate("/packages", { state: { response: data } });
         } catch (error) {
             console.error("Error:", error);
-            setLoading(false)
+            setLoading(false);
             alert("Failed to generate itinerary. Please try again later.");
         }
     };
+    
 
 
     return (
